@@ -1,4 +1,4 @@
-package edu.mjv.school.projetofinal.model;
+package edu.mjv.school.projetofinal.model.embeddable;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -7,7 +7,7 @@ import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import java.util.Calendar;
+import java.util.Date;
 
 @Embeddable
 @Getter
@@ -16,8 +16,8 @@ public class Log {
 
     @Temporal(TemporalType.TIMESTAMP)
     @Column(nullable = false)
-    private Calendar dataRegistro;
+    private Date dataRegistro;
 
     @Temporal(TemporalType.TIMESTAMP)
-    private Calendar dataAtualizacao;
+    private Date dataAtualizacao;
 }

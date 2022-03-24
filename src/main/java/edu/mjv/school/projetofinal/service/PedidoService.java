@@ -1,56 +1,61 @@
 package edu.mjv.school.projetofinal.service;
 
-import edu.mjv.school.projetofinal.exception.EmpityRepositoryExceprion;
-import edu.mjv.school.projetofinal.exception.ResorceNotFoundException;
-import edu.mjv.school.projetofinal.exception.UnprocessableEntityException;
-import edu.mjv.school.projetofinal.model.Pedido;
+import edu.mjv.school.projetofinal.exception.EntidadeImprocessavelException;
+import edu.mjv.school.projetofinal.exception.RecursoNaoEncontradoException;
+import edu.mjv.school.projetofinal.model.embeddable.Log;
+import edu.mjv.school.projetofinal.model.embeddable.QtdProdutoPorPedido;
+import edu.mjv.school.projetofinal.model.entity.Pedido;
+import edu.mjv.school.projetofinal.model.entity.Produto;
 import edu.mjv.school.projetofinal.repository.PedidoRepository;
+import edu.mjv.school.projetofinal.repository.ProdutoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
+import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 
 @Service
-public class PedidoService {
+public class PedidoService extends TemplateCrudService<Pedido> {
+    private final PedidoRepository repository;
 
     @Autowired
-    private PedidoRepository repository;
+    private ProdutoRepository produtoRepository;
 
-    public Pedido salvar(Pedido pedido){
-        if(pedido.getId() != null) {
-            throw new UnprocessableEntityException("Id nao deve ser expecificado");
-        }
-        return repository.save(pedido);
+    @Autowired
+    public PedidoService(PedidoRepository repository) {
+        super(repository);
+        this.repository = (PedidoRepository) super.repository;
     }
 
-    public Pedido atualizar(Pedido pedido) {
-        if(! repository.existsById(pedido.getId())) {
-            throw new ResorceNotFoundException("registro de pedido nao encontrado");
+    @Override
+    public Pedido salvar(Pedido pedido) throws EntidadeImprocessavelException {
+        Log log = new Log();
+        log.setDataRegistro(new Date());
+        log.setDataAtualizacao(new Date());
+        pedido.setLog(log);
+        for(Produto p : pedido.getProdutos()) {
+            for (QtdProdutoPorPedido produtoPedido:  pedido.getQtdProdutoPorPedido()) {
+                if(p.getId().equals(produtoPedido.getProdutoId())) {
+                    Produto produtoCorrente = produtoRepository.findById(p.getId()).get();
+                    decrementarQtdProdutoEstoque(produtoCorrente, produtoPedido.getQuantidadePorPedido());
+                    p = produtoRepository.save(produtoCorrente);
+                }
+            }
         }
-        return repository.save(pedido);
+
+        return super.salvar(pedido);
     }
 
-    public Pedido buscarPorId(Long id) {
-        Optional<Pedido> pedido = repository.findById(id);
-        if(pedido.isEmpty()) {
-            throw new ResorceNotFoundException("registro de pedido nao encontrado");
-        }
-        return pedido.get();
+    @Override
+    public Pedido atualizar(Pedido pedido) throws RecursoNaoEncontradoException {
+        System.err.println(new Date());
+        pedido.getLog().setDataAtualizacao(new Date());
+        return super.atualizar(pedido);
     }
 
-    public List<Pedido> buscarTodos() {
-        List<Pedido> pedidos = repository.findAll();
-        if(pedidos.isEmpty()) {
-            throw new EmpityRepositoryExceprion("nao ha pedidos registrados");
-        }
-        return pedidos;
-    }
-
-    public List<Pedido> buscarPorFuncionaioId(Long funcionarioId) {
+    public List<Pedido> buscarPorFuncionarioId(Long funcionarioId) {
         List<Pedido> pedidos = repository.findByFuncionarioId(funcionarioId);
         if(pedidos.isEmpty()) {
-            throw new ResorceNotFoundException("nao ha pedidos associados a esse funcionario");
+            throw new RecursoNaoEncontradoException("nao ha pedidos associados a esse funcionario");
         }
         return pedidos;
     }
@@ -58,15 +63,16 @@ public class PedidoService {
     public List<Pedido> buscarPorClienteId(Long clienteId) {
         List<Pedido> pedidos = repository.findByClienteId(clienteId);
         if(pedidos.isEmpty()) {
-            throw new ResorceNotFoundException("nao ha pedidos associados a esse cliente");
+            throw new RecursoNaoEncontradoException("nao ha pedidos associados a esse cliente");
         }
         return pedidos;
     }
 
-    public void deletar (Long id) {
-        if(! repository.existsById(id)) {
-            throw new ResorceNotFoundException("registro de produto nao encontrado");
+    private void decrementarQtdProdutoEstoque(Produto produto, int quantidadePorPedido) {
+        int estoque = produto.getQuantidadeEstoque();
+        if( produto.getQuantidadeEstoque() < quantidadePorPedido) {
+            throw new EntidadeImprocessavelException();
         }
-        repository.deleteById(id);
+        produto.setQuantidadeEstoque(estoque - quantidadePorPedido);
     }
 }

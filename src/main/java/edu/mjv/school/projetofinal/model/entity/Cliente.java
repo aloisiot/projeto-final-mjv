@@ -1,4 +1,4 @@
-package edu.mjv.school.projetofinal.model;
+package edu.mjv.school.projetofinal.model.entity;
 
 import lombok.Getter;
 import lombok.Setter;

@@ -1,8 +1,6 @@
 package edu.mjv.school.projetofinal.repository;
 
-import edu.mjv.school.projetofinal.model.Cliente;
-import edu.mjv.school.projetofinal.model.Funcionario;
-import edu.mjv.school.projetofinal.model.Pedido;
+import edu.mjv.school.projetofinal.model.entity.Pedido;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;

@@ -1,5 +1,8 @@
 package edu.mjv.school.projetofinal.model.entity;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
@@ -8,6 +11,8 @@ import javax.validation.constraints.Size;
 import java.math.BigDecimal;
 
 @Entity
+@Getter
+@Setter
 public class Produto extends DataBaseEntity {
 
     @Id
@@ -33,53 +38,4 @@ public class Produto extends DataBaseEntity {
     @Positive(message = "O preco deve ser positivo")
     @NotNull(message = "Campo preco nao deve ser nulo")
     private BigDecimal preco;
-
-    @Override
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getNome() {
-        return nome;
-    }
-
-    public void setNome(String nome) {
-        this.nome = nome;
-    }
-
-    public String getDescricao() {
-        return descricao;
-    }
-
-    public void setDescricao(String descricao) {
-        this.descricao = descricao;
-    }
-
-    public Categroia getCategroia() {
-        return categroia;
-    }
-
-    public void setCategroia(Categroia categroia) {
-        this.categroia = categroia;
-    }
-
-    public Integer getQuantidadeEstoque() {
-        return quantidadeEstoque;
-    }
-
-    public void setQuantidadeEstoque(Integer quantidadeEstoque) {
-        this.quantidadeEstoque = quantidadeEstoque;
-    }
-
-    public BigDecimal getPreco() {
-        return preco;
-    }
-
-    public void setPreco(BigDecimal preco) {
-        this.preco = preco;
-    }
 }

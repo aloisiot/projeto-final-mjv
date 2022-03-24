@@ -1,8 +1,5 @@
 package edu.mjv.school.projetofinal.model.entity;
 
-import lombok.Getter;
-import lombok.Setter;
-
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.Pattern;
@@ -11,8 +8,6 @@ import java.util.Calendar;
 import java.util.List;
 
 @MappedSuperclass
-@Getter
-@Setter
 public abstract class Pessoa extends DataBaseEntity
         implements Serializable {
 
@@ -43,4 +38,69 @@ public abstract class Pessoa extends DataBaseEntity
 
     @OneToMany(cascade = {CascadeType.REFRESH, CascadeType.PERSIST})
     private List<Endereco> enderecos;
+
+    @Override
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getNome() {
+        return nome;
+    }
+
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+
+    public String getCpf() {
+        return cpf;
+    }
+
+    public void setCpf(String cpf) {
+        this.cpf = cpf;
+    }
+
+    public String getRg() {
+        return rg;
+    }
+
+    public void setRg(String rg) {
+        this.rg = rg;
+    }
+
+    public String getTelefone() {
+        return telefone;
+    }
+
+    public void setTelefone(String telefone) {
+        this.telefone = telefone;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public Calendar getDataNaciento() {
+        return dataNaciento;
+    }
+
+    public void setDataNaciento(Calendar dataNaciento) {
+        this.dataNaciento = dataNaciento;
+    }
+
+    public List<Endereco> getEnderecos() {
+        return enderecos;
+    }
+
+    public void setEnderecos(List<Endereco> enderecos) {
+        this.enderecos = enderecos;
+    }
 }

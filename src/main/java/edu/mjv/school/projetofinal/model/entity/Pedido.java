@@ -1,8 +1,6 @@
 package edu.mjv.school.projetofinal.model.entity;
 
 import edu.mjv.school.projetofinal.model.embeddable.*;
-import lombok.Getter;
-import lombok.Setter;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
@@ -10,8 +8,6 @@ import javax.validation.constraints.NotNull;
 import java.util.List;
 
 @Entity
-@Getter
-@Setter
 public class Pedido extends DataBaseEntity {
 
     @Id
@@ -51,4 +47,85 @@ public class Pedido extends DataBaseEntity {
     private Cliente cliente;
 
     private Long enderecoEntregaId;
+
+    @Override
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Log getLog() {
+        return log;
+    }
+
+    public void setLog(Log log) {
+        this.log = log;
+    }
+
+    public StatusPedido getStatus() {
+        return status;
+    }
+
+    public void setStatus(StatusPedido status) {
+        this.status = status;
+    }
+
+    public MeioPagamento getMeioPagamento() {
+        return meioPagamento;
+    }
+
+    public void setMeioPagamento(MeioPagamento meioPagamento) {
+        this.meioPagamento = meioPagamento;
+    }
+
+    public MeioCompra getMeioCompra() {
+        return meioCompra;
+    }
+
+    public void setMeioCompra(MeioCompra meioCompra) {
+        this.meioCompra = meioCompra;
+    }
+
+    public List<Produto> getProdutos() {
+        return produtos;
+    }
+
+    public void setProdutos(List<Produto> produtos) {
+        this.produtos = produtos;
+    }
+
+    public List<QtdProdutoPorPedido> getQtdProdutoPorPedido() {
+        return qtdProdutoPorPedido;
+    }
+
+    public void setQtdProdutoPorPedido(List<QtdProdutoPorPedido> qtdProdutoPorPedido) {
+        this.qtdProdutoPorPedido = qtdProdutoPorPedido;
+    }
+
+    public Funcionario getFuncionario() {
+        return funcionario;
+    }
+
+    public void setFuncionario(Funcionario funcionario) {
+        this.funcionario = funcionario;
+    }
+
+    public Cliente getCliente() {
+        return cliente;
+    }
+
+    public void setCliente(Cliente cliente) {
+        this.cliente = cliente;
+    }
+
+    public Long getEnderecoEntregaId() {
+        return enderecoEntregaId;
+    }
+
+    public void setEnderecoEntregaId(Long enderecoEntregaId) {
+        this.enderecoEntregaId = enderecoEntregaId;
+    }
 }
